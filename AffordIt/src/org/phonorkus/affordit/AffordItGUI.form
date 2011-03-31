@@ -316,15 +316,11 @@
                       <Component id="jInsurancePost" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jTaxesLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jTaxesPre" linkSize="6" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                          <Component id="jFTFTaxes" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jTaxesPost" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jTaxesLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jTaxesPre" linkSize="6" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jFTFTaxes" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jTaxesPost" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="17" max="32767" attributes="0"/>
               </Group>
