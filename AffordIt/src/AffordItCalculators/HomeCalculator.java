@@ -34,14 +34,15 @@ public class HomeCalculator
     //
     
     // Debt Ratio
-    private double _rho = 0.45;
+    private double _rho = 0.35;
     public double getDebtRatio() { return _rho; }
     public void setDebtRatio(double DebtRatio) throws RangeException
     {
         if (0.0 >= DebtRatio) 
             throw new RangeException("Error: Negative debt ratio.");
         if (1.0 <= DebtRatio)
-            throw new RangeException("Error: Can't spend more money than you make.");
+            throw new RangeException("Error: Can't spend more money than you "
+                    + "make.");
         
         this._rho = DebtRatio;
     }
@@ -51,7 +52,8 @@ public class HomeCalculator
         if (0.0 >= DebtRatio) 
             throw new RangeException("Error: Negative debt ratio.");
         if (100.0 <= DebtRatio)
-            throw new RangeException("Error: Can't spend more money than you make.");
+            throw new RangeException("Error: Can't spend more money than you "
+                    + "make.");
         this._rho = DebtRatio / 100.0;
     }
 
@@ -61,14 +63,16 @@ public class HomeCalculator
     public void setIncome(double Income) throws RangeException 
     {
         if (0.0 >= Income) 
-            throw new RangeException("Error: Positive income is required to buy a house.");
+            throw new RangeException("Error: Positive income is required to "
+                    + "buy a house.");
         this._I = Income;
     }
     public double getMonthlyIncome() { return _I / 12.0; }
     public void setMonthlyIncome(double Income) throws RangeException
     {
         if (0.0 >= Income) 
-            throw new RangeException("Error: Positive income is required to buy a house.");
+            throw new RangeException("Error: Positive income is required to "
+                    + "buy a house.");
         this._I = Income * 12.0;
     }
 
@@ -78,14 +82,16 @@ public class HomeCalculator
     public void setInsurance(double Insurance) throws RangeException
     {
         if (0.0 >= Insurance) 
-            throw new RangeException("Error: Insurance is required to buy a house.");
+            throw new RangeException("Error: Insurance is required to buy a "
+                    + "house.");
         this._s = Insurance;
     }
     public double getMonthlyInsurance() { return _s / 12.0; }
     public void setMonthlyInsurance(double Insurance) throws RangeException
     {
         if (0.0 >= Insurance) 
-            throw new RangeException("Error: Insurance is required to buy a house.");
+            throw new RangeException("Error: Insurance is required to buy a "
+                    + "house.");
         this._s = Insurance * 12.0;
     }
 
@@ -95,14 +101,17 @@ public class HomeCalculator
     public void setAdditionalDebt(double AdditionalDebt) throws RangeException
     {
         if (0.0 > AdditionalDebt) 
-            throw new RangeException("Error: Add additional income to the Income field.");
+            throw new RangeException("Error: Add additional income to the "
+                    + "Income field.");
         this._delta = AdditionalDebt;
     }
     public double getMonthlyAdditionalDebt() { return _delta / 12.0; }
-    public void setMonthlyAdditionalDebt(double AdditionalDebt) throws RangeException
+    public void setMonthlyAdditionalDebt(double AdditionalDebt)
+            throws RangeException
     {
         if (0.0 > AdditionalDebt) 
-            throw new RangeException("Error: Add additional income to the Income field.");
+            throw new RangeException("Error: Add additional income to the "
+                    + "Income field.");
         this._delta = AdditionalDebt * 12.0;
     }
 
@@ -112,7 +121,8 @@ public class HomeCalculator
     public void setDownPayment(double DownPayment) throws RangeException
     {
         if (0.0 > DownPayment) 
-            throw new RangeException("Error: A significant down payment is required to purchase a home.");
+            throw new RangeException("Error: A significant down payment is "
+                    + "required to purchase a home.");
         this._D = DownPayment;
     }
 
@@ -121,13 +131,15 @@ public class HomeCalculator
     public double getHOADues() { return _HOA; }
     public void setHOADues(double HOADues) throws RangeException {
         if (0.0 > HOADues) 
-            throw new RangeException("Error: No HOA will pay you to live at a place.");
+            throw new RangeException("Error: No HOA will pay you to live at "
+                    + "a place.");
         this._HOA = HOADues;
     }
     public double getMonthlyHOADues() { return _HOA / 12.0; }
     public void setMonthlyHOADues(double HOADues) throws RangeException {
         if (0.0 > HOADues) 
-            throw new RangeException("Error: No HOA will pay you to live at a place.");
+            throw new RangeException("Error: No HOA will pay you to live at "
+                    + "a place.");
         this._HOA = HOADues * 12.0;
     }
 
@@ -180,8 +192,8 @@ public class HomeCalculator
     // TODO - Consider computing monthly leftover for budgeting...
 
     // Scale factor to get principal from available annual income.
-    private double _K = 0.0;
-    public double getKappa() { return _K; }
+    private double _X = 0.0;
+    public double getMoxie() { return _X; }
     
     // String table for Recommentdations.
     private String[] _Recommendations = 
@@ -196,7 +208,7 @@ public class HomeCalculator
 
     // Particular recommendation based on the numbers.
     /**
-     * Recommenation by the Index:
+     * Recommendation by the Index:
      * 0 = invalid
      * 1 = Debt Ratio.
      * 2 = Down Payment.
@@ -205,7 +217,8 @@ public class HomeCalculator
      * 5 = Interest.
      */
     private int _iRecommendation = 0;
-    public String Recommendation() { return _Recommendations[_iRecommendation]; }
+    public String Recommendation() {
+        return _Recommendations[_iRecommendation]; }
     
     // </editor-fold>
     
@@ -215,21 +228,21 @@ public class HomeCalculator
     //
     
     // Assume the inputs are correct and perform the calculations.
-    public void Update()
+    public final void Update()
     {
-        _ComputeKappa();
+        _ComputeMoxie();
         _ComputeAvailableIncome();
         _ComputeMaxHomePrice();
         _DetermineMaxInfluence();
     }
     
     
-    private void _ComputeKappa()
+    private void _ComputeMoxie()
     {
-        _K = _Kappa(_i);
+        _X = _Moxie(_i);
     }
     
-    private double _Kappa(double i)
+    private double _Moxie(double i)
     {
         double x = Math.pow((i/12.0)+ 1, 360.0);
         return 1.0 / (_t + (i * (x / (x - 1.0))));
@@ -242,17 +255,17 @@ public class HomeCalculator
     
     private void _ComputeMaxHomePrice()
     {
-        _H = (_K * _A) + _D;
+        _H = (_X * _A) + _D;
     }
     
     private void _DetermineMaxInfluence()
     {
         // Start with Insurance/HOA/Other Debt.
         _iRecommendation = 4;
-        double MaxInfluence = Math.abs(_K);
+        double MaxInfluence = Math.abs(_X);
 
         // Consider debt ratio.
-        double Influence = Math.abs(_I * _K);
+        double Influence = Math.abs(_I * _X);
         if (Influence > MaxInfluence)
         {
             _iRecommendation = 1;
@@ -260,7 +273,7 @@ public class HomeCalculator
         }
         
         // Consider Income
-        Influence = Math.abs(_rho * _K);
+        Influence = Math.abs(_rho * _X);
         if (Influence > MaxInfluence)
         {
             _iRecommendation = 3;
@@ -268,7 +281,7 @@ public class HomeCalculator
         }
         
         // Consider Down Payment
-        Influence = Math.abs(1.0 - (_t * _K));
+        Influence = Math.abs(1.0 - (_t * _X));
         if (Influence > MaxInfluence)
         {
             _iRecommendation = 2;
@@ -288,8 +301,8 @@ public class HomeCalculator
     // a beast.
     private double _InfluenceFromAPR()
     {
-        double dKappa_di = (_Kappa(_i + 0.0001) - _Kappa(_i - 0.0001)) / 0.0002;
-        return _A * dKappa_di;
+        double dMoxie_di = (_Moxie(_i + 0.0001) - _Moxie(_i - 0.0001)) / 0.0002;
+        return _A * dMoxie_di;
     }
     
     // </editor-fold>
