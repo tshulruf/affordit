@@ -23,14 +23,16 @@ public class AffordItGUI extends javax.swing.JFrame {
     private JFormattedTextField _BadEntry;
 
     private void ClearBadEntry(java.awt.AWTEvent evt) {
-        if ((evt.getSource() instanceof JFormattedTextField) && (null != _BadEntry)) {
+        if ((evt.getSource() instanceof JFormattedTextField) &&
+                (null != _BadEntry)) {
             if (evt.getSource().equals(_BadEntry)) {
                 _BadEntry = null;
             }
         }
     }
 
-    private void HandleInvalidField(JFormattedTextField TheField, String ErrorMessage) {
+    private void HandleInvalidField(JFormattedTextField TheField,
+            String ErrorMessage) {
         // add error message to secondary label
         jLblDetails.setText(ErrorMessage);
         jLblMaxPrice.setText("");
@@ -46,14 +48,16 @@ public class AffordItGUI extends javax.swing.JFrame {
     // Base class for a template method pattern.
     private interface IUpdateHomeCalculator {
 
-        public void Update(AffordItCalculators.HomeCalculator Calculator, double NewValue) throws RangeException;
+        public void Update(AffordItCalculators.HomeCalculator Calculator,
+                double NewValue) throws RangeException;
     }
     
     
     // Update the APR by percentage.
     private class TheAPRPercent implements IUpdateHomeCalculator {
 
-        public void Update(AffordItCalculators.HomeCalculator Calculator, double NewValue) throws RangeException {
+        public void Update(AffordItCalculators.HomeCalculator Calculator,
+                double NewValue) throws RangeException {
             Calculator.setAPRPercent(NewValue);
         }
     }
@@ -63,7 +67,8 @@ public class AffordItGUI extends javax.swing.JFrame {
     // Update the Debt Ratio by percentage.
     private class TheDebtRatioPercent implements IUpdateHomeCalculator {
 
-        public void Update(AffordItCalculators.HomeCalculator Calculator, double NewValue) throws RangeException {
+        public void Update(AffordItCalculators.HomeCalculator Calculator,
+                double NewValue) throws RangeException {
             Calculator.setDebtRatioPercent(NewValue);
         }
     }
@@ -73,7 +78,8 @@ public class AffordItGUI extends javax.swing.JFrame {
     // Update the Down Payment.
     private class TheDownPayment implements IUpdateHomeCalculator {
 
-        public void Update(AffordItCalculators.HomeCalculator Calculator, double NewValue) throws RangeException {
+        public void Update(AffordItCalculators.HomeCalculator Calculator,
+                double NewValue) throws RangeException {
             Calculator.setDownPayment(NewValue);
         }
     }
@@ -83,7 +89,8 @@ public class AffordItGUI extends javax.swing.JFrame {
     // Update the Monthly HOA.
     private class TheMonthlyHOA implements IUpdateHomeCalculator {
 
-        public void Update(AffordItCalculators.HomeCalculator Calculator, double NewValue) throws RangeException {
+        public void Update(AffordItCalculators.HomeCalculator Calculator,
+                double NewValue) throws RangeException {
             Calculator.setMonthlyHOADues(NewValue);
         }
     }
@@ -93,7 +100,8 @@ public class AffordItGUI extends javax.swing.JFrame {
     // Update the Income.
     private class TheIncome implements IUpdateHomeCalculator {
 
-        public void Update(AffordItCalculators.HomeCalculator Calculator, double NewValue) throws RangeException {
+        public void Update(AffordItCalculators.HomeCalculator Calculator,
+                double NewValue) throws RangeException {
             Calculator.setIncome(NewValue);
         }
     }
@@ -103,7 +111,8 @@ public class AffordItGUI extends javax.swing.JFrame {
     // Update the Insurance.
     private class TheInsurance implements IUpdateHomeCalculator {
 
-        public void Update(AffordItCalculators.HomeCalculator Calculator, double NewValue) throws RangeException {
+        public void Update(AffordItCalculators.HomeCalculator Calculator,
+                double NewValue) throws RangeException {
             Calculator.setInsurance(NewValue);
         }
     }
@@ -113,7 +122,8 @@ public class AffordItGUI extends javax.swing.JFrame {
     // Update the Monthly Payments.
     private class TheMonthlyPayments implements IUpdateHomeCalculator {
 
-        public void Update(AffordItCalculators.HomeCalculator Calculator, double NewValue) throws RangeException {
+        public void Update(AffordItCalculators.HomeCalculator Calculator,
+                double NewValue) throws RangeException {
             Calculator.setMonthlyAdditionalDebt(NewValue);
         }
     }
@@ -123,7 +133,8 @@ public class AffordItGUI extends javax.swing.JFrame {
     // Update the Tax by percent.
     private class TheTaxRatePercent implements IUpdateHomeCalculator {
 
-        public void Update(AffordItCalculators.HomeCalculator Calculator, double NewValue) throws RangeException {
+        public void Update(AffordItCalculators.HomeCalculator Calculator,
+                double NewValue) throws RangeException {
             Calculator.setTaxRatePercent(NewValue);
         }
     }
@@ -152,8 +163,9 @@ public class AffordItGUI extends javax.swing.JFrame {
 
 
         // Add formatters to the FormattedInputFields.
-        AbstractFormatterFactory ThreeDigitNumber = new AbstractFormatterFactory() {
-
+        AbstractFormatterFactory ThreeDigitNumber = 
+                new AbstractFormatterFactory()
+        {
             @Override
             public AbstractFormatter getFormatter(JFormattedTextField arg0) {
                 return new NumberFormatter(new java.text.DecimalFormat("#.000"));
@@ -162,8 +174,8 @@ public class AffordItGUI extends javax.swing.JFrame {
         jFTFAPR.setFormatterFactory(ThreeDigitNumber);
 
         // Add formatters to the FormattedInputFields.
-        AbstractFormatterFactory TwoDigitNumber = new AbstractFormatterFactory() {
-
+        AbstractFormatterFactory TwoDigitNumber = new AbstractFormatterFactory()
+        {
             @Override
             public AbstractFormatter getFormatter(JFormattedTextField arg0) {
                 return new NumberFormatter(new java.text.DecimalFormat("#.00"));
@@ -190,7 +202,8 @@ public class AffordItGUI extends javax.swing.JFrame {
     }
 
     
-    private synchronized void UpdateField(JFormattedTextField TheField, IUpdateHomeCalculator CalculatorInput)
+    private synchronized void UpdateField(JFormattedTextField TheField,
+            IUpdateHomeCalculator CalculatorInput)
     {
         // Debt ratio
         try {
@@ -211,12 +224,18 @@ public class AffordItGUI extends javax.swing.JFrame {
     }
     
 
-    private void UpdateLabels() {
+    private void UpdateLabels()
+    {
+        NumberFormat MoxieFormatter =
+                NumberFormat.getNumberInstance();
+        MoxieFormatter.setMaximumFractionDigits(2);
 
-        // Use built in currency formatter!
-        NumberFormat CurrencyFormatter = new java.text.DecimalFormat("$###,###,###");
-        jLblMaxPrice.setText(CurrencyFormatter.format(_HomeCalc.getMaxHomePrice()));
-        jLblDetails.setText(_HomeCalc.Recommendation());
+        jLblMaxPrice.setText(
+                NumberFormat.getCurrencyInstance().format(
+                _HomeCalc.getMaxHomePrice()));
+        jLblDetails.setText("Your Moxie is " +
+                MoxieFormatter.format(_HomeCalc.getMoxie()) +
+                " years.");
     }
 
     /** This method is called from within the constructor to
