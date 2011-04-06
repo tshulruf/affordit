@@ -262,7 +262,7 @@ public class AffordItGUI extends javax.swing.JFrame {
                 MoxieFormatter.format(_HomeCalc.getMoxie()) +
                 " years.");
         
-        if (_HomeCalc.MortgageInsuranceRequired())
+        if (_HomeCalc.UsedMti())
         	jMtiPost.setText("%  Required");
         else 
         	jMtiPost.setText("%");

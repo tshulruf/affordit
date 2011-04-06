@@ -111,7 +111,7 @@ public class HomeCalculator
             throw new RangeException("Error: Invalid Mortgage Insurance Rate.");
         _q = MortgageInsurance / 100.0;
     }
-    public boolean MortgageInsuranceRequired()
+    private boolean MortgageInsuranceRequired()
     {
         return (_D < (0.2 * _H));
     }
@@ -216,6 +216,10 @@ public class HomeCalculator
     private double _X = 0.0;
     public double getMoxie() { return _X; }
     
+    // True if mortgage insurance rate was included in Moxie calculation.
+    private boolean _UsedMti = false;
+    public boolean UsedMti() { return _UsedMti; }
+    
     // Helper constant used to minimize use of Math.pow()...
     private double _y = 0.0;
     private void computeHelper()
@@ -241,11 +245,14 @@ public class HomeCalculator
         // Compute available income.
         _A = (_rho * _I) - (_t * _D) - ((_s + _HOA + _delta) / 0.6);
 
+        // Compute Moxie. Might need to include Mortgage Insurance.
         if (useMTI)
             _X = 1.0 / (_t + (_q / 0.6) + (_i * (_y / (_y - 1.0))));
         else
             _X = 1.0 / (_t + (_i * (_y / (_y - 1.0))));
-        
+
+        _UsedMti = useMTI;
+
         // Compute max home price.
         _H = (_X * _A) + _D;
     }
