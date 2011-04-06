@@ -25,6 +25,7 @@ public class HomeCalculator
     // Constructor (run the default calculation)
     public HomeCalculator()
     {
+    	computeHelper();
         Update();
     }
 
@@ -188,6 +189,7 @@ public class HomeCalculator
         if (0.0 >= APR)
             throw new RangeException("Error: Invalid annual percentage rate.");
         _i = APR;
+        computeHelper();
     }
     public double getAPRPercent() { return _i * 100.0; }
     public void setAPRPercent(double APR) throws RangeException
@@ -195,6 +197,7 @@ public class HomeCalculator
         if (0.0 >= APR)
             throw new RangeException("Error: Invalid annual percentage rate.");
         _i = APR / 100.0;
+        computeHelper();
     }
 
     //
@@ -212,6 +215,13 @@ public class HomeCalculator
     // Scale factor to get principal from available annual income.
     private double _X = 0.0;
     public double getMoxie() { return _X; }
+    
+    // Helper constant used to minimize use of Math.pow()...
+    private double _y = 0.0;
+    private void computeHelper()
+    {
+    	_y = Math.pow((_i/12.0)+ 1, 360.0);
+    }
 
     //
     // Compute the outputs and make recommendation.
@@ -220,38 +230,22 @@ public class HomeCalculator
     // Assume the inputs are correct and perform the calculations.
     public final void Update()
     {
-        _UpdateNumbersNoMTI();
-        _UpdateNumbers(); // might need mortgage insurance.
+        _ComputeMaxHomePrice(false);
+
+        if (MortgageInsuranceRequired())
+        	_ComputeMaxHomePrice(true);
     }
 
-    private void _UpdateNumbersNoMTI()
-    {
-        _ComputeMoxie(false);
-        _ComputeMaxHomePrice();
-    }
-
-    private void _UpdateNumbers()
-    {
-        _ComputeMoxie(MortgageInsuranceRequired());
-        _ComputeMaxHomePrice();
-    }
-
-    private void _ComputeMoxie(boolean useMTI)
-    {
-        double x = Math.pow((_i/12.0)+ 1, 360.0);
-
-        if (useMTI)
-            _X = 1.0 / (_t + _q + (_i * (x / (x - 1.0))));
-        else
-            _X = 1.0 / (_t + (_i * (x / (x - 1.0))));
-    }
-
-    private void _ComputeMaxHomePrice()
+    private void _ComputeMaxHomePrice(boolean useMTI)
     {
         // Compute available income.
         _A = (_rho * _I) - (_t * _D) - ((_s + _HOA + _delta) / 0.6);
 
-        // Moxie is pre-computed.
+        if (useMTI)
+            _X = 1.0 / (_t + (_q / 0.6) + (_i * (_y / (_y - 1.0))));
+        else
+            _X = 1.0 / (_t + (_i * (_y / (_y - 1.0))));
+        
         // Compute max home price.
         _H = (_X * _A) + _D;
     }
