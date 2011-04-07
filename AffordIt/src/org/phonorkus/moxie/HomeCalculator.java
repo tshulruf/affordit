@@ -224,7 +224,8 @@ public class HomeCalculator
     private double _y = 0.0;
     private void computeHelper()
     {
-    	_y = Math.pow((_i/12.0)+ 1, 360.0);
+    	double x = Math.pow((_i/12.0)+ 1, 360.0);
+    	_y = _i * (x / (x - 1.0));
     }
 
     //
@@ -247,9 +248,9 @@ public class HomeCalculator
 
         // Compute Moxie. Might need to include Mortgage Insurance.
         if (useMTI)
-            _X = 1.0 / (_t + (_q / 0.6) + (_i * (_y / (_y - 1.0))));
+            _X = 1.0 / (_t + (_q / 0.6) + _y);
         else
-            _X = 1.0 / (_t + (_i * (_y / (_y - 1.0))));
+            _X = 1.0 / (_t + _y);
 
         _UsedMti = useMTI;
 
