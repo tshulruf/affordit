@@ -1,5 +1,8 @@
 \documentclass{article}
 \usepackage{hyperref}
+\hypersetup{colorlinks = true,
+            linkcolor = black,
+            urlcolor = blue}
 
 \title{AffordIt Algorithms Document}
 \author{Tom Shulruff}
@@ -11,12 +14,14 @@
 
 \section{Introduction}
 
-In December of 2007, I sold a home in San Luis Obispo to relocate
-to San Jose.  After renting an apartment for 6 months, I missed
+A couple of years ago, I sold a home in San Luis Obispo to relocate
+to San Jose.  Since then, I've missed
 the pleasure of owning a home (and the tax benefits).  So I started
-shopping for another home.  But how much could I afford?
+shopping for another home.  But how much can I afford?
 
-A simple equation answers this question; but it's complex
+With my Bachelor's of Science in Math and Physics in hand, I hit
+the books and derived a simple equation to answer this question.
+It's simple, but it's complex
 enough to make hand calculations a pain.  So I coded up a little
 calculator. AffordIt is written in Java using Swing and the latest
  Java Run Time
@@ -28,9 +33,12 @@ a mortgage.
 
 Purchasing a home requires a down payment and, usually, a loan,
 called a mortgage\footnote{
-\href{http://www.freddiemac.com/corporate/buying_and_owning.html}{Freddie Mac} 
-provides some excellent advice, and calculators  for
- prospective home buyers.
+\href{http://www.freddiemac.com}{Freddie Mac} 
+provides some excellent 
+\href{http://www.freddiemac.com/corporate/buying_and_owning.html}{advice}, 
+and 
+\href{http://www.freddiemac.com/corporate/buyown/english/calcs_tools/}{calculators}  
+for prospective home buyers.
 Of course, AffordIt is more thorough, accounting for HOA, taxes, and mortgage
  insurance.}.
 Owning a home also requires purchasing property insurance 
@@ -55,12 +63,10 @@ Lenders only allow debtors to spend a particular fraction of their
 Lenders call this the debtor's Debt Ratio. All 
 payments on debt (like PITI, car, or credit card payments) are
 included in this fraction of a debtor's gross income.
-Debtors have to take all of these variables into consideration when 
-computing how much
- home they can afford. 
-Using a years worth of 
-payments at a time will keep things scaled well and simplify the 
-computation.
+Debtors have to take all of these variables into consideration while 
+computing how much  home they can afford. 
+Using a year's worth of 
+payments at a time scales well and simplifies the computation.
 Table \ref{table:variables} summarizes these variables.
 
 \begin{table}
@@ -73,7 +79,7 @@ $I$ & Gross Annual Income \\
 $\rho$ & Debt Ratio \\
 $D$ & Down Payment \\
 $P$ & Mortgage Principal \\
-$A$ & Available Income \\
+$A$ & Available Income ($\rho I$) \\
 $X$ & Market Moxie \\
 \hline
 \multicolumn{2}{c}{\emph{Liabilities}} \\
@@ -97,13 +103,11 @@ $p$ & Annualized Other Debt Payment \\
 
 \pagebreak
 
-Breaking down the expenses, the allowed
+Breaking down the expenses: the allowed
 debt (gross income times debt ratio) has to cover 
 a years worth of monthly mortgage payments (principal and interest),
- property taxes, 
-annual insurance and HOA dues, mortgage insurance, and a year's
- worth of payments on 
-any additional debt. In symbols:
+ property taxes, insurance dues, HOA dues, mortgage insurance dues, and  
+any additional debt payments. In symbols:
 \begin{equation}
 \label{DebtRatio}
 \rho I = m + tH + s + d + p + qP
@@ -112,10 +116,11 @@ any additional debt. In symbols:
 Uncle Sam wants you to own a home. To help with this, Uncle Sam 
 made mortgage interest and property tax payments 
 ``income deductions.'' In other words, these bills get paid out 
-of gross income, as opposed to net income. Post-tax money pays 
-for insurance, other debt, and HOA dues. If available income is 
+of gross income, as opposed to net income. 
+Insurance payments, HOA dues, and any other debt payments 
+are paid after taxes. If available income is 
 measured pre-tax, then we can scale these post-tax expenses up 
-into pre-tax dollars to make a yet more conservative estimates.
+into pre-tax dollars to make a yet more conservative estimate.
 
 Let's say the tax rate is about $40$\% overall. This means that 
 post-tax dollars are worth about $60$\% of pre-tax dollars.
@@ -142,14 +147,15 @@ they're ignored here. Otherwise, they'd subtract out of the down
 \label{HomePrice}
 H = P + D
 \end{equation}
-A year's worth of payments\footnote{From Wolfram Research's 
-\href{http://mathworld.wolfram.com/Mortgage.html}{\emph{MathWorld}} 
-and scaled to 12 months.} on
-a principal with a 30-year fixed\footnote{
-There are other payment plans. The 30-year fixed mortgage has the
- highest monthly payment. This makes the most conservative limit 
-on the maximum affordable price for a home.} annual percentage 
-rate is
+A year's worth of payments\footnote{
+\href{http://mathworld.wolfram.com/topics/Pegg.html}{Pegg, Ed Jr.} "Mortgage." From 
+\href{http://mathworld.wolfram.com/}{MathWorld} -- A Wolfram Web Resource, created by 
+\href{http://mathworld.wolfram.com/about/author.html}{Eric W. Weisstein}. 
+\url{http://mathworld.wolfram.com/Mortgage.html}}
+ on a principal with a 30-year fixed\footnote{
+There are other payment plans. This one is common and allows
+for a simple limit on the maximum affordable price for a home.} 
+annual interest rate is:
 \begin{equation}
 \label{MonthlyPayment}
 m = Pi \left( \frac{((i/12) + 1)^{360}}{((i/12) + 1)^{360} - 1} \right)
@@ -179,13 +185,13 @@ i \left( \frac{((i/12) + 1)^{360}}{((i/12) + 1)^{360} - 1} \right)} + D
 
 Let's introduce two new variables, representing annual available income
  and a scaling factor to make this a little more palatable. Let the 
-annual available income be the numerator of equation (\ref{FinalPrincipal})
+annual available income be the numerator of equation (\ref{FinalPrincipal}):
 \begin{equation}
 \label{AvailableIncome}
 A = \rho I - tD - (s + d + p) / 0.6
 \end{equation}
 The rest of equation (\ref{FinalPrincipal}) represents the amount of
- principal that each dollar of available income purchases 
+ principal that each dollar of available income can purchase: 
 \begin{equation}
 \label{Moxie}
 X = \frac{1}{t + (q/0.6) +
@@ -211,11 +217,11 @@ Knowing the amount of debt a dollar can service can be very,
 very useful when 
 shopping for a home.  Let's say you make \$$100,000$ a year, have
  \$$150,000$ for down payment, and secured a mortgage rate of 
-$6.25$\%.  This makes for a Moxie of about $11.5$ years. 
+$6.25$\%.  In this case, your Moxie is about $11.5$ years. 
 In California, property taxes are a percentage of the
  selling price of the home, typically $1.3$\%.  Fire and earthquake
- insurance on a home is about \$$1000$ a year. If a lender allows
- $35$\% debt ratio, you can afford a \$$511,201$ home.
+ insurance on a home is about \$$1000$ a year. If your bank allows 
+you a $35$\% debt ratio, you can afford a \$$511,201$ home.
 
 Of course, that was a very idealized example. Most people don't have 
 \$$150,000$ laying around for a down payment on a house. If you have
@@ -223,37 +229,44 @@ less than $20$\% of the price of the home available for a down payment,
 then you have to get mortgage insurance. Mortgage 
 insurance is usually
 between $1.5$\% and $6.0$\% of the 
-principal\footnote{According to 
-\href{http://en.wikipedia.org/wiki/Mortgage_insurance}{Wikipedia}.} 
+principal\footnote{According to the 
+\href{http://en.wikipedia.org/wiki/Main_Page}{Wikipedia}
+article on 
+\href{http://en.wikipedia.org/wiki/Mortgage_insurance}{Mortgage Insurance}.} 
  annually. As shown in Equation (\ref{Moxie}), mortgage insurance 
 reduces Moxie. For example, if you only have \$$50,000$ for a down
-payment, but can find a low mortgage insurance rate of $1.5$\%, Moxie
-is reduced to $8.94$ years and you can only afford a \$$342,112$ house.
-By adding in mortgage insurance, you've incurred a \$$69,089$ penalty
-to affording a house.
+payment, and you can find a low mortgage insurance rate of $1.5$\%,
+your Moxieis reduced to $8.94$ years and you can only 
+afford a \$$342,112$ house.
+By needing mortgage insurance, you've incurred a \$$69,089$ penalty
+to the maximum amount you can afford to pay for a house. 
+If you have bad credit, then the mortgage
+insurance rate can get up to $6.0$\%, dropping Moxie down to $5.35$
+years and the maximum home price down to \$$224,883$. Times have
+have really changed since the housing bubble burst.
 
 In the San Francisco Bay Area, there are no single family homes
- that cheap (that you might want to actually occupy).
+ that cheap\footnote{That you might want to actually occupy...}.
   There are, however, a variety of condominiums within this 
 price range.  All condominiums require HOA dues.  With some 
 algebra, the HOA dues can be said to add to the price of the home:
 \begin{equation}
-H = H_{condo} + dX
+H_{equiv} = H_{condo} + dX
 \end{equation}
 HOA dues take away from annual available income.  Effectively, 
 they add to the cost of the home.  In this way, we capitalize 
-HOA dues.
+HOA dues into a ``house equivalent price.''
 
 Let's say there's a condominium available for \$$325,000$ with 
 HOA dues of \$$350$ a month (\$$4,200$ annually).  Keeping the 
-same mortgage rate and property tax rate that produced a Moxie of
- about $8.94$ years.  This puts the effective home price 
-at \$$362,548$ - too expensive.
+same APR, mortgage interest rate, 
+ and property tax rate that produced a Moxie of about $8.94$ years, 
+the ``house equivalent price'' is  \$$362,548$ - too expensive.
 
 Similarly, if you're paying for a car at \$$350$ a month and 
 owe less than \$$37,584$, you should pay off the automotive debt 
-with mortgage debt. Removing that payment will allow you to 
-afford the additional principal.
+with mortgage debt. Remove that car payment, and you can  
+afford to borrow the additional principal.
 
 \pagebreak
 
@@ -261,26 +274,30 @@ afford the additional principal.
 
 With all this in mind, let's take a look at what the monthly 
 budget looks like for a buyer making \$$85,000$ who's lucky 
-enough to have \$$50,000$ for a down payment. Table 
+enough to have \$$50,000$ for a down payment. According to 
+the equations, this lucky buyer can afford to pay \$$286,386$ 
+for house, 
+but will need mortgage insurance in order to get the loan.
+Table 
 \ref{table:budget} itemizes a typical budget.
 \begin{table}
 \begin{center}
 \begin{tabular}{r|l}
 \hline
 \hline
-\$$85,000.00$ & Gross annual income \\
+\$$85,000.00$ & Gross Annual Income \\
 $35$\% & Debt Ratio \\
 \$$2479.17$ & Allowed Monthly Payments \\
 \hline
-(\$$1555.53$) & Monthly Principal \& Interest payment \\
-(\$$368.09$) & Monthly Property Taxes \\
+(\$$1455.48$) & Monthly Principal \& Interest Payment \\
+(\$$310.26$) & Monthly Property Taxes \\
 (\$$83.33$) & Monthly Insurance Payment \\
-(\$$250.00$) & Monthly HOA Payment \\
-(\$$2,256.95$) & Total Monthly Payments \\
+(\$$417.65$) & Monthly Mortgage Insurance Payment \\
+(\$$2,266.95$) & Total Monthly Payments \\
 \hline
-\$$51,000.00$ & Net annual income after 60\% taxes \\
-\$$4,250.00$ & Net monthly income after taxes \\
-\$$1,993.05$ & Money Left After Taxes For Other Stuff \\
+\$$51,000.00$ & Net Annual Income (after taxes) \\
+\$$4,250.00$ & Net Monthly Income (after taxes) \\
+\$$1,983.05$ & Money Left Over For Other Stuff \\
 \hline
 \hline
 \end{tabular}
@@ -288,8 +305,8 @@ $35$\% & Debt Ratio \\
 \label{table:budget}
 \end{center}
 \end{table}
-Thanks to the fact that we scaled the HOA and insurance 
-payment up into pre-tax dollars before making the estimate, 
+By scaling the insurance 
+payments up into pre-tax dollars before making the estimate, 
 the bills come in under the $35$\% debt ratio.
 
 \section{Summary}
